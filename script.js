@@ -1,20 +1,15 @@
 let humanScore = 0
 let computerScore = 0
+let humanChoice
+let computerChoice
+
+const scorecard = document.getElementById("score")
+const buttons = document.querySelectorAll("button")
 
 
 function getComputerChoice(){
     let arr = ["rock", "paper", "scissor"]
     return arr[Math.floor(Math.random()*3)]
-}
-
-function getHumanChoice() {
-    let choice = prompt("Enter your choice: ");
-    // Check if the user canceled the prompt
-    if (choice !== null) {
-        return choice.toLowerCase();
-    } else {
-        return null; // or handle this case as needed
-    }
 }
 
 
@@ -26,27 +21,33 @@ function playRound(humanChoice, computerChoice) {
         (humanChoice === "paper" && computerChoice === "rock") ||
         (humanChoice === "scissor" && computerChoice === "paper")
     ) {
-        console.log(`You Win! ${humanChoice} beats ${computerChoice}`);
         humanScore += 1;
     } else {
-        console.log(`You Lose! ${computerChoice} beats ${humanChoice}`);
         computerScore += 1;
+    }
+
+
+    scorecard.textContent = `Score:-  You: ${humanScore}    Computer: ${computerScore}`;
+
+    if (humanScore === 5 || computerScore === 5) {
+        if (humanScore > computerScore) {
+            window.alert("You Win the Game!");
+        } else {
+            window.alert("You Lose the Game!");
+        }
+        location.reload();
     }
 }
 
 function playGame(){
-    for (round = 0; round < 5; round++){
-        let humanChoice = getHumanChoice()
-        let computerChoice = getComputerChoice()
-        playRound(humanChoice, computerChoice)
-    }
-    console.log(`Your Score: ${humanScore}\nComputer Score: ${computerScore}`)
-    if (humanScore > computerScore){
-        console.log("You Win!")
-    }
-    else{
-        console.log("You Lose!")
-    }
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            humanChoice = button.value
+            computerChoice = getComputerChoice()
+            playRound(humanChoice, computerChoice)
+        })
+        setTimeout(5000);
+    })
 }
 
 playGame()
